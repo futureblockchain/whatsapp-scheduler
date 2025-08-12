@@ -1,5 +1,21 @@
+# Entornos virtuales de Python
 venv/
+.venv/
+
+# Cachés de Python
 __pycache__/
 *.pyc
+
+# Archivos distribuidos / empaquetados
 .dist/
-.venv
+
+# Archivos de configuración de entorno (variables sensibles)
+.env
+frontend/.env
+backend/.env
+
+# Base de datos SQLite local (no subir)
+backend/whatsapp_scheduler.db
+
+# Carpeta node_modules en frontend
+frontend/node_modules/
