@@ -1,197 +1,200 @@
 import asyncio
+import logging
+from datetime import datetime, timezone
+from typing import Optional
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
-from apscheduler.triggers.date import DateTrigger
-from apscheduler.triggers.interval import IntervalTrigger
-from datetime import datetime
+from apscheduler.jobstores.sqlalchemy import SQLAlchemyJobStore
+from apscheduler.executors.pool import ThreadPoolExecutor
 from sqlalchemy.orm import Session
-from sqlalchemy import and_
-
-from database import SessionLocal, get_db
+from database import SessionLocal, engine
 from models import ScheduledMessage
-from whatsapp_service import whatsapp_service
-from settings import settings
+from message_sender import send_scheduled_message
+
+# Configurar logging
+logger = logging.getLogger(__name__)
 
 class MessageSchedulerService:
-    """
-    Servicio para programar y enviar mensajes automáticamente.
-    Usa APScheduler para manejar los jobs de envío.
-    """
-    
     def __init__(self):
-        self.scheduler = AsyncIOScheduler(timezone=settings.scheduler_timezone)
-        self.is_running = False
+        # Configuración más conservadora del scheduler
+        jobstores = {
+            'default': SQLAlchemyJobStore(engine=engine, tablename='apscheduler_jobs')
+        }
+        executors = {
+            'default': ThreadPoolExecutor(max_workers=3)  # Reducir workers
+        }
+        job_defaults = {
+            'coalesce': True,
+            'max_instances': 1,
+            'misfire_grace_time': 60  # 1 minuto de gracia
+        }
         
-    def start(self):
-        """Iniciar el scheduler"""
-        if not self.is_running:
-            # Programar verificación periódica de mensajes pendientes
+        self.scheduler = AsyncIOScheduler(
+            jobstores=jobstores,
+            executors=executors,
+            job_defaults=job_defaults,
+            timezone=timezone.utc
+        )
+        
+        self._running = False
+        self._shutdown_requested = False
+
+    @property
+    def is_running(self) -> bool:
+        """Verificar si el scheduler está corriendo"""
+        return self._running and self.scheduler.running
+
+
+    async def schedule_message(self, message_id: int, send_time: datetime) -> bool:
+        """Programar un mensaje para envío"""
+        try:
+            if self._shutdown_requested:
+                logger.warning("No se pueden programar mensajes durante shutdown")
+                return False
+            
+            # Validar que la fecha sea futura
+            now = datetime.now(timezone.utc)
+            if send_time.replace(tzinfo=timezone.utc) <= now:
+                logger.error(f"Fecha de envío {send_time} debe ser futura")
+                return False
+            
+            job_id = f"whatsapp_message_{message_id}"
+            
+            # Remover job existente si existe
+            try:
+                self.scheduler.remove_job(job_id)
+                logger.info(f"Job existente {job_id} removido")
+            except:
+                pass  # Job no existía
+            
+            # Programar nuevo job usando la función independiente
             self.scheduler.add_job(
-                func=self._check_pending_messages,
-                trigger=IntervalTrigger(seconds=settings.check_interval_seconds),
-                id='check_pending_messages',
-                name='Verificar mensajes pendientes',
+                func=send_scheduled_message,
+                args=[message_id],
+                trigger='date',
+                run_date=send_time.replace(tzinfo=timezone.utc),
+                id=job_id,
                 replace_existing=True
             )
             
-            self.scheduler.start()
-            self.is_running = True
-            print(f"📅 Scheduler iniciado - verificando cada {settings.check_interval_seconds}s")
+            logger.info(f"Mensaje ID {message_id} programado para {send_time} UTC")
+            return True
             
-            # Cargar mensajes pendientes al iniciar
-            asyncio.create_task(self._reschedule_pending_messages())
-    
+        except Exception as e:
+            logger.error(f"Error programando mensaje {message_id}: {e}")
+            return False
+
+    async def cancel_message(self, message_id: int) -> bool:
+        """Cancelar un mensaje programado"""
+        try:
+            job_id = f"whatsapp_message_{message_id}"
+            
+            try:
+                self.scheduler.remove_job(job_id)
+                logger.info(f"Job {job_id} cancelado")
+                return True
+            except:
+                logger.warning(f"Job {job_id} no encontrado para cancelar")
+                return True  # Considerar como exitoso si no existe
+                
+        except Exception as e:
+            logger.error(f"Error cancelando mensaje {message_id}: {e}")
+            return False
+
+    def start(self):
+        """Iniciar el scheduler"""
+        try:
+            if not self.scheduler.running:
+                self.scheduler.start()
+                self._running = True
+                logger.info("Scheduler iniciado exitosamente")
+                
+                # Cargar mensajes pendientes
+                self._load_pending_messages()
+            else:
+                logger.warning("Scheduler ya está corriendo")
+                
+        except Exception as e:
+            logger.error(f"Error iniciando scheduler: {e}")
+            raise
+
     def stop(self):
         """Detener el scheduler"""
-        if self.is_running:
-            self.scheduler.shutdown()
-            self.is_running = False
-            print("📅 Scheduler detenido")
-    
-    async def schedule_message(self, message_id: int, send_time: datetime):
-        """
-        Programar un mensaje específico para envío.
-        
-        Args:
-            message_id: ID del mensaje en la base de datos
-            send_time: Fecha y hora de envío
-        """
-        job_id = f"send_message_{message_id}"
-        
-        # Remover job existente si existe
-        if self.scheduler.get_job(job_id):
-            self.scheduler.remove_job(job_id)
-        
-        # Programar nuevo job
-        self.scheduler.add_job(
-            func=self._send_scheduled_message,
-            trigger=DateTrigger(run_date=send_time),
-            args=[message_id],
-            id=job_id,
-            name=f"Enviar mensaje {message_id}",
-            replace_existing=True
-        )
-        
-        print(f"📅 Mensaje {message_id} programado para {send_time}")
-    
-    async def cancel_message(self, message_id: int):
-        """Cancelar el envío programado de un mensaje"""
-        job_id = f"send_message_{message_id}"
-        
-        if self.scheduler.get_job(job_id):
-            self.scheduler.remove_job(job_id)
-            print(f"📅 Envío cancelado para mensaje {message_id}")
-        
-    async def _check_pending_messages(self):
-        """
-        Verificar mensajes pendientes que deberían enviarse ya.
-        Este es un mecanismo de respaldo en caso de que fallen los jobs programados.
-        """
+        try:
+            self._shutdown_requested = True
+            
+            if self.scheduler.running:
+                self.scheduler.shutdown(wait=True)
+                logger.info("Scheduler detenido")
+            
+            self._running = False
+            
+        except Exception as e:
+            logger.error(f"Error deteniendo scheduler: {e}")
+
+    def _load_pending_messages(self):
+        """Cargar mensajes pendientes desde la BD al iniciar"""
         try:
             db = SessionLocal()
-            now = datetime.now()
-            
-            # Buscar mensajes que deberían haberse enviado pero no se han enviado
-            overdue_messages = db.query(ScheduledMessage).filter(
-                and_(
+            try:
+                # Buscar mensajes no enviados con fecha futura
+                now = datetime.now(timezone.utc)
+                pending_messages = db.query(ScheduledMessage).filter(
                     ScheduledMessage.is_sent == False,
-                    ScheduledMessage.send_time <= now
-                )
-            ).all()
-            
-            for message in overdue_messages:
-                print(f"⚠️ Enviando mensaje atrasado {message.id}")
-                await self._send_scheduled_message(message.id)
+                    ScheduledMessage.send_time > now,
+                    ScheduledMessage.error_message == None  # Solo los que no han fallado
+                ).all()
                 
-            db.close()
-            
+                loaded_count = 0
+                for message in pending_messages:
+                    # Usar asyncio.create_task de forma segura
+                    try:
+                        # Programar directamente usando función independiente
+                        job_id = f"whatsapp_message_{message.id}"
+                        self.scheduler.add_job(
+                            func=send_scheduled_message,
+                            args=[message.id],
+                            trigger='date',
+                            run_date=message.send_time.replace(tzinfo=timezone.utc),
+                            id=job_id,
+                            replace_existing=True
+                        )
+                        loaded_count += 1
+                    except Exception as e:
+                        logger.error(f"Error cargando mensaje {message.id}: {e}")
+                
+                logger.info(f"Cargados {loaded_count} mensajes pendientes")
+                
+            finally:
+                db.close()
+                
         except Exception as e:
-            print(f"❌ Error verificando mensajes pendientes: {str(e)}")
-    
-    async def _reschedule_pending_messages(self):
-        """
-        Re-programar todos los mensajes pendientes al iniciar el servidor.
-        Útil después de reiniciar la aplicación.
-        """
+            logger.error(f"Error cargando mensajes pendientes: {e}")
+
+    def get_job_count(self) -> int:
+        """Obtener número de jobs programados"""
         try:
-            db = SessionLocal()
-            now = datetime.now()
-            
-            # Buscar mensajes pendientes futuros
-            pending_messages = db.query(ScheduledMessage).filter(
-                and_(
-                    ScheduledMessage.is_sent == False,
-                    ScheduledMessage.send_time > now
-                )
-            ).all()
-            
-            for message in pending_messages:
-                await self.schedule_message(message.id, message.send_time)
-            
-            print(f"📅 Re-programados {len(pending_messages)} mensajes pendientes")
-            db.close()
-            
-        except Exception as e:
-            print(f"❌ Error re-programando mensajes: {str(e)}")
-    
-    async def _send_scheduled_message(self, message_id: int):
-        """
-        Enviar un mensaje programado específico.
-        
-        Args:
-            message_id: ID del mensaje en la base de datos
-        """
-        db = SessionLocal()
-        
+            return len(self.scheduler.get_jobs())
+        except:
+            return 0
+
+    def get_next_jobs(self, limit: int = 5) -> list:
+        """Obtener próximos jobs programados"""
         try:
-            # Buscar el mensaje
-            message = db.query(ScheduledMessage).filter(
-                ScheduledMessage.id == message_id
-            ).first()
+            jobs = self.scheduler.get_jobs()
+            # Ordenar por próxima ejecución
+            jobs.sort(key=lambda x: x.next_run_time or datetime.max.replace(tzinfo=timezone.utc))
             
-            if not message:
-                print(f"❌ Mensaje {message_id} no encontrado")
-                return
-            
-            if message.is_sent:
-                print(f"⚠️ Mensaje {message_id} ya fue enviado")
-                return
-            
-            # Intentar enviar el mensaje
-            print(f"📤 Enviando mensaje {message_id} a {message.phone}")
-            
-            result = await whatsapp_service.send_message(
-                phone=message.phone,
-                message=message.message
-            )
-            
-            # Actualizar estado en la base de datos
-            message.sent_at = datetime.now()
-            
-            if result.get('success'):
-                message.is_sent = True
-                message.error_message = None
-                print(f"✅ Mensaje {message_id} enviado exitosamente")
-            else:
-                message.error_message = result.get('error', 'Error desconocido')
-                print(f"❌ Error enviando mensaje {message_id}: {message.error_message}")
-            
-            db.commit()
-            
+            return [
+                {
+                    'id': job.id,
+                    'next_run_time': job.next_run_time.isoformat() if job.next_run_time else None,
+                    'trigger': str(job.trigger)
+                }
+                for job in jobs[:limit]
+            ]
         except Exception as e:
-            print(f"❌ Excepción enviando mensaje {message_id}: {str(e)}")
-            
-            # Actualizar con error en la BD
-            message = db.query(ScheduledMessage).filter(
-                ScheduledMessage.id == message_id
-            ).first()
-            
-            if message:
-                message.error_message = str(e)
-                message.sent_at = datetime.now()
-                db.commit()
-        
-        finally:
-            db.close()
+            logger.error(f"Error obteniendo jobs: {e}")
+            return []
 
 # Instancia global del scheduler
 scheduler_service = MessageSchedulerService()

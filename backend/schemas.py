@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field, validator
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Optional
 import re
 
@@ -13,9 +13,9 @@ class ScheduledMessageBase(BaseModel):
         # Limpiar el número (quitar espacios, guiones, etc.)
         clean_phone = re.sub(r'[^\d+]', '', v)
         
-        # Validar formato básico
-        if not re.match(r'^(\+?52)?[0-9]{10}$', clean_phone.replace('+', '')):
-            raise ValueError('Número de teléfono debe tener 10 dígitos (formato México)')
+        # Validar formato E.164 internacional: + seguido de 7-15 dígitos
+        if not re.match(r'^\+[1-9]\d{7,14}$', clean_phone):
+            raise ValueError('Formato inválido. Use un número internacional válido con prefijo (ej: +1555612891, +525512345678)')
         
         return clean_phone
 
@@ -25,7 +25,14 @@ class ScheduledMessageCreate(ScheduledMessageBase):
     
     @validator('send_time')
     def validate_send_time(cls, v):
-        if v <= datetime.now():
+        # Asegurar que ambas fechas sean timezone-aware
+        now = datetime.now(timezone.utc)
+        
+        # Si v no tiene timezone, asumimos UTC
+        if v.tzinfo is None:
+            v = v.replace(tzinfo=timezone.utc)
+        
+        if v <= now:
             raise ValueError('La fecha de envío debe ser en el futuro')
         return v
 
@@ -39,14 +46,18 @@ class ScheduledMessageUpdate(BaseModel):
     def validate_phone(cls, v):
         if v is not None:
             clean_phone = re.sub(r'[^\d+]', '', v)
-            if not re.match(r'^(\+?52)?[0-9]{10}$', clean_phone.replace('+', '')):
-                raise ValueError('Número de teléfono debe tener 10 dígitos (formato México)')
+            if not re.match(r'^\+[1-9]\d{7,14}$', clean_phone):
+                raise ValueError('Formato inválido. Use un número internacional válido con prefijo')
         return v
     
     @validator('send_time')
     def validate_send_time(cls, v):
-        if v is not None and v <= datetime.now():
-            raise ValueError('La fecha de envío debe ser en el futuro')
+        if v is not None:
+            now = datetime.now(timezone.utc)
+            if v.tzinfo is None:
+                v = v.replace(tzinfo=timezone.utc)
+            if v <= now:
+                raise ValueError('La fecha de envío debe ser en el futuro')
         return v
 
 class ScheduledMessageResponse(ScheduledMessageBase):
@@ -70,8 +81,8 @@ class MessageSendRequest(BaseModel):
     @validator('phone')
     def validate_phone(cls, v):
         clean_phone = re.sub(r'[^\d+]', '', v)
-        if not re.match(r'^(\+?52)?[0-9]{10}$', clean_phone.replace('+', '')):
-            raise ValueError('Número de teléfono debe tener 10 dígitos (formato México)')
+        if not re.match(r'^\+[1-9]\d{7,14}$', clean_phone):
+            raise ValueError('Formato inválido. Use un número internacional válido con prefijo')
         return clean_phone
 
 class MessageSendResponse(BaseModel):

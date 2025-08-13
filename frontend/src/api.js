@@ -118,19 +118,19 @@ export const formatters = {
     });
   },
 
-  // Formatear número de teléfono
+  // Formatear número de teléfono sin agregar prefijo automáticamente
   formatPhone(phone) {
     if (!phone) return '';
     
     // Quitar caracteres no numéricos excepto +
-    const clean = phone.replace(/[^\d+]/g, '');
+    let clean = phone.replace(/[^\d+]/g, '');
     
-    // Si no tiene código de país, agregar +52 (México)
-    if (!clean.startsWith('+52') && !clean.startsWith('52')) {
-      return `+52${clean}`;
+    // Asegurar que empiece con '+'
+    if (!clean.startsWith('+')) {
+      clean = '+' + clean;
     }
     
-    return clean.startsWith('+') ? clean : `+${clean}`;
+    return clean;
   },
 
   // Truncar texto largo

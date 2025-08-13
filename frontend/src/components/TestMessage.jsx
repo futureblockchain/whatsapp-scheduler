@@ -7,7 +7,7 @@ import toast from 'react-hot-toast';
 const TestMessage = () => {
   const [loading, setLoading] = useState(false);
   const [lastResult, setLastResult] = useState(null);
-  
+
   const {
     register,
     handleSubmit,
@@ -25,27 +25,34 @@ const TestMessage = () => {
   const watchedMessage = watch('message');
   const watchedPhone = watch('phone');
 
+  // Función local para formatear teléfono en preview sin forzar +52
+  const formatPhonePreview = (phone) => {
+    if (!phone) return '';
+    // Solo limpiar espacios, guiones y paréntesis
+    return phone.replace(/[\s\-()]/g, '');
+  };
+
   const onSubmit = async (data) => {
     try {
       setLoading(true);
       setLastResult(null);
-      
-      // Formatear los datos
+
+      // Formatear los datos para enviar (usar el helper oficial)
       const messageData = {
-        phone: formatters.formatPhone(data.phone),
+        phone: formatters.formatPhone(data.phone), // Asumiendo que formatPhone respeta el prefijo si ya está
         message: data.message.trim()
       };
 
       const result = await apiService.sendMessageNow(messageData);
-      
+
       setLastResult(result);
-      
+
       if (result.success) {
         toast.success('Mensaje enviado exitosamente');
       } else {
         toast.error(`Error enviando mensaje: ${result.error}`);
       }
-      
+
     } catch (error) {
       console.error('Error sending message:', error);
       const errorMessage = error.response?.data?.detail || 'Error enviando el mensaje';
@@ -105,8 +112,9 @@ const TestMessage = () => {
             {...register('phone', {
               required: 'El número de teléfono es requerido',
               pattern: {
-                value: /^(\+?52)?[0-9]{10}$/,
-                message: 'Formato inválido. Use: +52XXXXXXXXXX o XXXXXXXXXX'
+                // Validar formato internacional E.164 básico: + y entre 10 y 15 dígitos
+                value: /^\+?[1-9]\d{9,14}$/,
+                message: 'Formato inválido. Use un número internacional válido con prefijo +'
               }
             })}
           />
@@ -161,7 +169,7 @@ const TestMessage = () => {
                 </div>
                 <div>
                   <p className="font-medium text-sm text-gray-900">
-                    {watchedPhone ? formatters.formatPhone(watchedPhone) : 'Número no especificado'}
+                    {watchedPhone ? formatPhonePreview(watchedPhone) : 'Número no especificado'}
                   </p>
                   <p className="text-xs text-gray-500">WhatsApp</p>
                 </div>
@@ -194,7 +202,7 @@ const TestMessage = () => {
               </>
             )}
           </button>
-          
+
           <button
             type="button"
             onClick={handleClear}
@@ -209,10 +217,10 @@ const TestMessage = () => {
       {lastResult && (
         <div className="mt-8">
           <h3 className="text-lg font-semibold text-gray-900 mb-4">Resultado del Envío</h3>
-          
+
           <div className={`border rounded-lg p-4 ${
-            lastResult.success 
-              ? 'bg-green-50 border-green-200' 
+            lastResult.success
+              ? 'bg-green-50 border-green-200'
               : 'bg-red-50 border-red-200'
           }`}>
             <div className="flex items-center space-x-2 mb-3">
@@ -228,7 +236,7 @@ const TestMessage = () => {
                 </>
               )}
             </div>
-            
+
             <div className="space-y-2 text-sm">
               <div>
                 <span className="font-medium text-gray-700">Estado:</span>
@@ -238,14 +246,14 @@ const TestMessage = () => {
                   {lastResult.status}
                 </span>
               </div>
-              
+
               <div>
                 <span className="font-medium text-gray-700">Fecha:</span>
                 <span className="ml-2 text-gray-600">
                   {formatters.toDisplayDate(lastResult.timestamp)}
                 </span>
               </div>
-              
+
               {lastResult.message_id && (
                 <div>
                   <span className="font-medium text-gray-700">ID del mensaje:</span>
@@ -254,7 +262,7 @@ const TestMessage = () => {
                   </span>
                 </div>
               )}
-              
+
               {lastResult.error && (
                 <div>
                   <span className="font-medium text-gray-700">Error:</span>

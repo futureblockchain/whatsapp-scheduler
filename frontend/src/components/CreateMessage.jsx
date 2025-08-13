@@ -93,15 +93,15 @@ const CreateMessage = ({ onSuccess }) => {
           <input
             id="phone"
             type="tel"
-            placeholder="+52 55 1234 5678"
+            placeholder="+521234567890 o +12135551234"
             className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-whatsapp-500 focus:border-transparent transition-colors ${
               errors.phone ? 'border-red-500' : 'border-gray-300'
             }`}
             {...register('phone', {
               required: 'El número de teléfono es requerido',
               pattern: {
-                value: /^(\+?52)?[0-9]{10}$/,
-                message: 'Formato inválido. Use: +52XXXXXXXXXX o XXXXXXXXXX'
+                value: /^\+[1-9]\d{9,14}$/,
+                message: 'Formato inválido. Use el formato internacional, ej: +521234567890 o +12135551234'
               }
             })}
           />
@@ -109,7 +109,7 @@ const CreateMessage = ({ onSuccess }) => {
             <p className="mt-1 text-sm text-red-600">{errors.phone.message}</p>
           )}
           <p className="mt-1 text-xs text-gray-500">
-            Formato: +52 seguido de 10 dígitos (ejemplo: +52 55 1234 5678)
+            Formato: Código país con + seguido de 10 a 15 dígitos (ejemplo: +521234567890 o +12135551234)
           </p>
         </div>
 

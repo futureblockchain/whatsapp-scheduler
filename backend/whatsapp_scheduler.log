@@ -1,0 +1,137 @@
+2025-08-12 23:19:00,895 - main - INFO - 🚀 Iniciando WhatsApp Scheduler API...
+2025-08-12 23:19:00,899 - main - INFO - 📊 Base de datos inicializada
+2025-08-12 23:19:00,900 - apscheduler.scheduler - INFO - Scheduler started
+2025-08-12 23:19:00,900 - scheduler - INFO - Scheduler iniciado exitosamente
+2025-08-12 23:19:00,911 - scheduler - INFO - Cargados 0 mensajes pendientes
+2025-08-12 23:19:00,911 - main - INFO - ⚡ Scheduler iniciado exitosamente
+2025-08-12 23:19:00,911 - main - INFO - ✅ Aplicación iniciada correctamente
+2025-08-12 23:19:00,956 - main - INFO - 🚀 Iniciando WhatsApp Scheduler API...
+2025-08-12 23:19:00,960 - main - INFO - 📊 Base de datos inicializada
+2025-08-12 23:19:00,960 - apscheduler.scheduler - INFO - Scheduler started
+2025-08-12 23:19:00,961 - scheduler - INFO - Scheduler iniciado exitosamente
+2025-08-12 23:19:00,972 - scheduler - INFO - Cargados 0 mensajes pendientes
+2025-08-12 23:19:00,972 - main - INFO - ⚡ Scheduler iniciado exitosamente
+2025-08-12 23:19:00,972 - main - INFO - ✅ Aplicación iniciada correctamente
+2025-08-12 23:23:22,849 - main - INFO - 🛑 Cerrando WhatsApp Scheduler API...
+2025-08-12 23:23:22,853 - scheduler - INFO - Scheduler detenido
+2025-08-12 23:23:22,853 - main - INFO - ⚡ Scheduler detenido
+2025-08-12 23:23:22,853 - main - INFO - ✅ Aplicación cerrada correctamente
+2025-08-12 23:23:22,859 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2025-08-12 23:30:15,233 - main - INFO - 🛑 Cerrando WhatsApp Scheduler API...
+2025-08-12 23:30:15,239 - scheduler - INFO - Scheduler detenido
+2025-08-12 23:30:15,239 - main - INFO - ⚡ Scheduler detenido
+2025-08-12 23:30:15,239 - main - INFO - ✅ Aplicación cerrada correctamente
+2025-08-12 23:30:15,249 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2025-08-12 23:33:41,125 - main - INFO - 🚀 Iniciando WhatsApp Scheduler API...
+2025-08-12 23:33:41,130 - main - INFO - 📊 Base de datos inicializada
+2025-08-12 23:33:41,131 - apscheduler.scheduler - INFO - Scheduler started
+2025-08-12 23:33:41,131 - scheduler - INFO - Scheduler iniciado exitosamente
+2025-08-12 23:33:41,142 - scheduler - INFO - Cargados 0 mensajes pendientes
+2025-08-12 23:33:41,142 - main - INFO - ⚡ Scheduler iniciado exitosamente
+2025-08-12 23:33:41,143 - main - INFO - ✅ Aplicación iniciada correctamente
+2025-08-12 23:34:02,769 - main - INFO - 🛑 Cerrando WhatsApp Scheduler API...
+2025-08-12 23:34:02,771 - scheduler - INFO - Scheduler detenido
+2025-08-12 23:34:02,772 - main - INFO - ⚡ Scheduler detenido
+2025-08-12 23:34:02,772 - main - INFO - ✅ Aplicación cerrada correctamente
+2025-08-12 23:34:02,774 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2025-08-12 23:34:04,872 - main - INFO - 🚀 Iniciando WhatsApp Scheduler API...
+2025-08-12 23:34:04,876 - main - INFO - 📊 Base de datos inicializada
+2025-08-12 23:34:04,876 - apscheduler.scheduler - INFO - Scheduler started
+2025-08-12 23:34:04,877 - scheduler - INFO - Scheduler iniciado exitosamente
+2025-08-12 23:34:04,886 - scheduler - INFO - Cargados 0 mensajes pendientes
+2025-08-12 23:34:04,887 - main - INFO - ⚡ Scheduler iniciado exitosamente
+2025-08-12 23:34:04,887 - main - INFO - ✅ Aplicación iniciada correctamente
+2025-08-13 11:00:46,247 - main - INFO - 🛑 Cerrando WhatsApp Scheduler API...
+2025-08-13 11:00:46,263 - scheduler - INFO - Scheduler detenido
+2025-08-13 11:00:46,265 - main - INFO - ⚡ Scheduler detenido
+2025-08-13 11:00:46,265 - main - INFO - ✅ Aplicación cerrada correctamente
+2025-08-13 11:00:46,327 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2025-08-13 11:00:49,794 - main - INFO - 🚀 Iniciando WhatsApp Scheduler API...
+2025-08-13 11:00:49,803 - main - INFO - 📊 Base de datos inicializada
+2025-08-13 11:00:49,804 - apscheduler.scheduler - INFO - Scheduler started
+2025-08-13 11:00:49,804 - scheduler - INFO - Scheduler iniciado exitosamente
+2025-08-13 11:00:49,812 - scheduler - INFO - Cargados 0 mensajes pendientes
+2025-08-13 11:00:49,813 - main - INFO - ⚡ Scheduler iniciado exitosamente
+2025-08-13 11:00:49,813 - main - INFO - ✅ Aplicación iniciada correctamente
+2025-08-13 11:05:33,258 - main - INFO - 🛑 Cerrando WhatsApp Scheduler API...
+2025-08-13 11:05:33,263 - scheduler - INFO - Scheduler detenido
+2025-08-13 11:05:33,263 - main - INFO - ⚡ Scheduler detenido
+2025-08-13 11:05:33,263 - main - INFO - ✅ Aplicación cerrada correctamente
+2025-08-13 11:05:33,267 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2025-08-13 11:05:36,257 - main - INFO - 🚀 Iniciando WhatsApp Scheduler API...
+2025-08-13 11:05:36,260 - main - INFO - 📊 Base de datos inicializada
+2025-08-13 11:05:36,261 - apscheduler.scheduler - INFO - Scheduler started
+2025-08-13 11:05:36,261 - scheduler - INFO - Scheduler iniciado exitosamente
+2025-08-13 11:05:36,269 - scheduler - INFO - Cargados 0 mensajes pendientes
+2025-08-13 11:05:36,270 - main - INFO - ⚡ Scheduler iniciado exitosamente
+2025-08-13 11:05:36,270 - main - INFO - ✅ Aplicación iniciada correctamente
+2025-08-13 11:05:41,562 - main - INFO - Enviando mensaje inmediato a +15556128917
+2025-08-13 11:05:41,927 - httpx - INFO - HTTP Request: POST https://graph.facebook.com/v20.0/tu_phone_number_id_aqui/messages "HTTP/1.1 401 Unauthorized"
+2025-08-13 11:05:44,294 - main - INFO - Creando mensaje para +15556128917 a las 2025-08-13 18:30:00+00:00
+2025-08-13 11:05:44,315 - main - INFO - Mensaje creado en BD con ID: 1
+2025-08-13 11:05:44,322 - scheduler - ERROR - Error programando mensaje 1: Schedulers cannot be serialized. Ensure that you are not passing a scheduler instance as an argument to a job, or scheduling an instance method where the instance contains a scheduler as an attribute.
+2025-08-13 11:05:44,322 - main - ERROR - Error programando mensaje 1
+2025-08-13 11:07:05,092 - main - INFO - 🛑 Cerrando WhatsApp Scheduler API...
+2025-08-13 11:07:05,094 - scheduler - INFO - Scheduler detenido
+2025-08-13 11:07:05,094 - main - INFO - ⚡ Scheduler detenido
+2025-08-13 11:07:05,094 - main - INFO - ✅ Aplicación cerrada correctamente
+2025-08-13 11:07:05,095 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2025-08-13 11:07:19,719 - __main__ - INFO - 🚀 Iniciando servidor WhatsApp Scheduler...
+2025-08-13 11:07:19,753 - main - INFO - 🚀 Iniciando WhatsApp Scheduler API...
+2025-08-13 11:07:19,759 - main - INFO - 📊 Base de datos inicializada
+2025-08-13 11:07:19,760 - apscheduler.scheduler - INFO - Scheduler started
+2025-08-13 11:07:19,760 - scheduler - INFO - Scheduler iniciado exitosamente
+2025-08-13 11:07:19,772 - scheduler - ERROR - Error cargando mensaje 1: Schedulers cannot be serialized. Ensure that you are not passing a scheduler instance as an argument to a job, or scheduling an instance method where the instance contains a scheduler as an attribute.
+2025-08-13 11:07:19,772 - scheduler - INFO - Cargados 0 mensajes pendientes
+2025-08-13 11:07:19,772 - main - INFO - ⚡ Scheduler iniciado exitosamente
+2025-08-13 11:07:19,772 - main - INFO - ✅ Aplicación iniciada correctamente
+2025-08-13 11:07:28,122 - main - INFO - Enviando mensaje inmediato a +15556128917
+2025-08-13 11:07:29,104 - httpx - INFO - HTTP Request: POST https://graph.facebook.com/v20.0/309958495536131/messages "HTTP/1.1 400 Bad Request"
+2025-08-13 11:08:03,830 - __main__ - INFO - 🚀 Iniciando servidor WhatsApp Scheduler...
+2025-08-13 11:08:03,866 - main - INFO - 🚀 Iniciando WhatsApp Scheduler API...
+2025-08-13 11:08:03,870 - main - INFO - 📊 Base de datos inicializada
+2025-08-13 11:08:03,870 - apscheduler.scheduler - INFO - Scheduler started
+2025-08-13 11:08:03,871 - scheduler - INFO - Scheduler iniciado exitosamente
+2025-08-13 11:08:03,881 - scheduler - ERROR - Error cargando mensaje 1: Schedulers cannot be serialized. Ensure that you are not passing a scheduler instance as an argument to a job, or scheduling an instance method where the instance contains a scheduler as an attribute.
+2025-08-13 11:08:03,881 - scheduler - INFO - Cargados 0 mensajes pendientes
+2025-08-13 11:08:03,881 - main - INFO - ⚡ Scheduler iniciado exitosamente
+2025-08-13 11:08:03,881 - main - INFO - ✅ Aplicación iniciada correctamente
+2025-08-13 11:08:03,886 - main - INFO - 🛑 Cerrando WhatsApp Scheduler API...
+2025-08-13 11:08:03,886 - scheduler - INFO - Scheduler detenido
+2025-08-13 11:08:03,886 - main - INFO - ⚡ Scheduler detenido
+2025-08-13 11:08:03,886 - main - INFO - ✅ Aplicación cerrada correctamente
+2025-08-13 11:08:03,888 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2025-08-13 11:08:11,814 - main - INFO - 🛑 Cerrando WhatsApp Scheduler API...
+2025-08-13 11:08:11,815 - scheduler - INFO - Scheduler detenido
+2025-08-13 11:08:11,815 - main - INFO - ⚡ Scheduler detenido
+2025-08-13 11:08:11,815 - main - INFO - ✅ Aplicación cerrada correctamente
+2025-08-13 11:08:11,816 - apscheduler.scheduler - INFO - Scheduler has been shut down
+2025-08-13 11:09:05,559 - __main__ - INFO - 🚀 Iniciando servidor WhatsApp Scheduler...
+2025-08-13 11:09:05,601 - main - INFO - 🚀 Iniciando WhatsApp Scheduler API...
+2025-08-13 11:09:05,609 - main - INFO - 📊 Base de datos inicializada
+2025-08-13 11:09:05,610 - apscheduler.scheduler - INFO - Scheduler started
+2025-08-13 11:09:05,610 - scheduler - INFO - Scheduler iniciado exitosamente
+2025-08-13 11:09:05,627 - apscheduler.scheduler - INFO - Added job "send_scheduled_message" to job store "default"
+2025-08-13 11:09:05,627 - scheduler - INFO - Cargados 1 mensajes pendientes
+2025-08-13 11:09:05,627 - main - INFO - ⚡ Scheduler iniciado exitosamente
+2025-08-13 11:09:05,628 - main - INFO - ✅ Aplicación iniciada correctamente
+2025-08-13 11:09:15,186 - main - INFO - Enviando mensaje inmediato a +15556128917
+2025-08-13 11:09:15,890 - httpx - INFO - HTTP Request: POST https://graph.facebook.com/v20.0/309958495536131/messages "HTTP/1.1 400 Bad Request"
+2025-08-13 11:09:18,159 - main - INFO - Creando mensaje para +15556128917 a las 2025-08-13 18:30:00+00:00
+2025-08-13 11:09:18,171 - main - INFO - Mensaje creado en BD con ID: 2
+2025-08-13 11:09:18,178 - apscheduler.scheduler - INFO - Added job "send_scheduled_message" to job store "default"
+2025-08-13 11:09:18,179 - scheduler - INFO - Mensaje ID 2 programado para 2025-08-13 18:30:00+00:00 UTC
+2025-08-13 11:10:07,653 - main - INFO - Enviando mensaje inmediato a +12137055530
+2025-08-13 11:10:08,957 - httpx - INFO - HTTP Request: POST https://graph.facebook.com/v20.0/309958495536131/messages "HTTP/1.1 200 OK"
+2025-08-13 11:11:58,384 - main - INFO - Creando mensaje para +12137055530 a las 2025-08-13 17:14:00+00:00
+2025-08-13 11:11:58,399 - main - INFO - Mensaje creado en BD con ID: 3
+2025-08-13 11:11:58,408 - apscheduler.scheduler - INFO - Added job "send_scheduled_message" to job store "default"
+2025-08-13 11:11:58,408 - scheduler - INFO - Mensaje ID 3 programado para 2025-08-13 17:14:00+00:00 UTC
+2025-08-13 11:12:20,892 - main - INFO - Enviando mensaje inmediato a +12137055530
+2025-08-13 11:12:22,178 - httpx - INFO - HTTP Request: POST https://graph.facebook.com/v20.0/309958495536131/messages "HTTP/1.1 200 OK"
+2025-08-13 11:14:00,027 - apscheduler.executors.default - INFO - Running job "send_scheduled_message (trigger: date[2025-08-13 17:14:00 UTC], next run at: 2025-08-13 17:14:00 UTC)" (scheduled at 2025-08-13 17:14:00+00:00)
+2025-08-13 11:14:00,033 - message_sender - INFO - Iniciando envío de mensaje ID: 3
+2025-08-13 11:14:00,042 - apscheduler.scheduler - INFO - Removed job whatsapp_message_3
+2025-08-13 11:14:00,840 - httpx - INFO - HTTP Request: POST https://graph.facebook.com/v20.0/309958495536131/messages "HTTP/1.1 200 OK"
+2025-08-13 11:14:00,842 - message_sender - INFO - Mensaje ID 3 enviado exitosamente
+2025-08-13 11:14:00,859 - apscheduler.executors.default - INFO - Job "send_scheduled_message (trigger: date[2025-08-13 17:14:00 UTC], next run at: 2025-08-13 17:14:00 UTC)" executed successfully
